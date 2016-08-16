@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Usage jenkins-slave.sh [options] -url http://jenkins SECRET SLAVE_NAME
+# Optional environment variables :
+# * JENKINS_TUNNEL : HOST:PORT for a tunnel to route TCP traffic to jenkins host, when jenkins can't be directly accessed over network
+# * JENKINS_URL : alternate jenkins URL
+
+# except a secret and a slave name to be passed in
+# ad15e596a0cc2628d7f8d77c09c2498770cd670ad2261b631eddb3dc0936e8da docker-slave-8a9212d4babe
+
+echo '------args passed to jenkins slave--------'
+echo $@
+echo '-----end args passed to jenkins slave-----'
+echo 'env:'
+echo `env`
+echo '----------------'
+
+echo "JENKINS_TUNNEL=$JENKINS_TUNNEL"
+echo "JENKINS_URL=$JENKINS_URL"
+
+set -e
+
+if [[ ! -z "$JENKINS_URL" ]]; then
+    URL="-url $JENKINS_URL"
+else
+    echo 'Required environment variable [JENKINS_URL] not specified'
+    exit 1
+fi
+
+if [[ ! -z "$JENKINS_TUNNEL" ]]; then
+    TUNNEL="-tunnel $JENKINS_TUNNEL"
+else
+    echo 'environment variable [JENKINS_TUNNEL] not specified, will default to [$JENKINS_URL:50000]'
+fi
+
+echo "JENKINS_TUNNEL=$JENKINS_TUNNEL"
+echo "JENKINS_URL=$JENKINS_URL"
+echo "TUNNEL=$TUNNEL"
+echo "URL=$URL"
+set -x
+
+java $JAVA_OPTS -cp /usr/share/jenkins/slave.jar hudson.remoting.jnlp.Main -headless $TUNNEL $URL "$@"
