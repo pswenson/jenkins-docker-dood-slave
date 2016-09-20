@@ -1,6 +1,7 @@
 OWNER=pswenson
-VERSION?=latest
 IMAGE_NAME=jenkins-docker-dood-slave
+VERSION=latest
+
 
 .PHONY: build push run
 
@@ -10,3 +11,9 @@ build:
 
 push:
 	docker push ${OWNER}/${IMAGE_NAME}:${VERSION}
+
+shell:
+	docker run --privileged -it --entrypoint=/bin/bash -v /var/run/docker.sock:/var/run/docker.sock ${OWNER}/${IMAGE_NAME}:${VERSION}
+
+run:
+	docker run --privileged -it  -v /var/run/docker.sock:/var/run/docker.sock -d ${OWNER}/${IMAGE_NAME}:${VERSION}

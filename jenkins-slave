@@ -5,15 +5,15 @@
 # * JENKINS_TUNNEL : HOST:PORT for a tunnel to route TCP traffic to jenkins host, when jenkins can't be directly accessed over network
 # * JENKINS_URL : alternate jenkins URL
 
-# except a secret and a slave name to be passed in
+# except a secret and a slave name to be passed in e.g.
 # ad15e596a0cc2628d7f8d77c09c2498770cd670ad2261b631eddb3dc0936e8da docker-slave-8a9212d4babe
 
 echo '------args passed to jenkins slave--------'
 echo $@
 echo '-----end args passed to jenkins slave-----'
 echo 'env:'
-echo `env`
-echo '----------------'
+echo `env | sort`
+echo '------------------------------------------'
 
 echo "JENKINS_TUNNEL=$JENKINS_TUNNEL"
 echo "JENKINS_URL=$JENKINS_URL"

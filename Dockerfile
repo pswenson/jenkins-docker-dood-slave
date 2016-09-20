@@ -8,16 +8,15 @@ RUN apk --update add \
     git \
     bash \
     vim \
-    openjdk8 \
     make \
     sudo \
     openssh-client \
     docker \
-    tzdata
+    tzdata \
+    jq
 
 ENV HOME /home/jenkins
 ENV TZ America/Denver
-ENV DOCKER_API_VERSION=1.22
 RUN adduser -D -h $HOME jenkins jenkins \
     && chmod a+rwx $JENKINS_HOME
 
@@ -27,9 +26,8 @@ RUN curl --create-dirs -sSLo /usr/share/jenkins/slave.jar http://repo.jenkins-ci
 
 COPY jenkins-slave /usr/local/bin/jenkins-slave
 COPY start /usr/local/bin/start
-RUN date > /docker-image-timestamp
 
-VOLUME /home/jenkins
 WORKDIR /home/jenkins
-USER root
 ENTRYPOINT ["start"]
+
+
